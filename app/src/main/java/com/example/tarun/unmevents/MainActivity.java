@@ -1,5 +1,6 @@
 package com.example.tarun.unmevents;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
 import com.thomashaertel.widget.MultiSpinner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,6 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,16 +48,17 @@ public class MainActivity extends AppCompatActivity {
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String urlString = "http://datastore.unm.edu/events/events.xml";
+    TableLayout t1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //TableLayout tl = (TableLayout) findViewById(R.id.main_table);
         // create spinner list elements
         new DownloadXmlTask(this).execute(urlString);
 
-        dateSelect = (Button) findViewById(R.id.dateSelect);
+       /* dateSelect = (Button) findViewById(R.id.dateSelect);
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
         currentDate = sdf.format(new Date());
         dateSelect.setText(currentDate);
@@ -60,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 DialogFragment dialogFragment = new DateDialog(v);
                 dialogFragment.show(getSupportFragmentManager(), "start_date_picker");
             }
-        });
+        });*/
     }
     class DownloadXmlTask extends AsyncTask<String, Object, List<Event>> {
         NodeList nodelist;
@@ -97,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Event> result) {
+
+            //TableLayout tl = (TableLayout) findViewById(R.id.main_table);
             for (int temp = 0; temp < nodelist.getLength(); temp++) {
                 Event event = new Event();
                 Node nNode = nodelist.item(temp);
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     Element eElement = (Element) nNode;
                     event.setId(getNode("uid", eElement));
                     event.setDescription(getNode("description", eElement));
-                    event.setDescription(getNode("summary", eElement));
+                    event.setSummary(getNode("summary", eElement));
                     event.setCategory(getNode("categories", eElement));
                     event.setEventClass(getNode("class", eElement));
                     event.setLocation(getNode("location", eElement));
@@ -116,7 +126,67 @@ public class MainActivity extends AppCompatActivity {
                 }
                 events.add(event);
             }
-            adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item);
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            String[] eventSummary = new String[events.size()];
+            String[] eventDate = new String[events.size()];
+            int i = 0;
+            for(Event e:events){
+                eventSummary[i] = e.getSummary();
+                String d= "";
+                if(e.getStartTime()!=null) {
+                    d = df.format(e.getStartTime());
+                    eventDate[i] = d;
+                }
+                i++;
+            }
+            CustomListAdapter adapter=new CustomListAdapter(activity, eventSummary, eventDate);
+            ListView list =(ListView)findViewById(R.id.list);
+            list.setAdapter(adapter);
+           /* TextView[] textArray = new TextView[events.size()];
+            TextView[] textArray2 = new TextView[events.size()];
+            TableRow[] tr_head = new TableRow[events.size()];
+
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            int i=0;
+            for(Event e:events){
+                tr_head[i] = new TableRow(getApplicationContext());
+                tr_head[i].setId(i + 1);
+                tr_head[i].setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+
+                // Here create the TextView dynamically
+
+                textArray[i] = new TextView(getApplicationContext());
+                textArray[i].setId(i + 111);
+                textArray[i].setText(e.getSummary());
+                textArray[i].setTextSize(16);
+                textArray[i].setTextColor(Color.BLACK);
+                textArray[i].setPadding(5, 20, 5, 20);
+
+                Date date = null;
+                String d = "";
+                if(e.getStartTime()!=null) {
+                    date = e.getStartTime();
+                    d = df.format(date);
+                }
+
+                textArray2[i] = new TextView(getApplicationContext());
+                textArray2[i].setId(i + 222);
+                textArray2[i].setText(d);
+                textArray2[i].setTextColor(Color.BLACK);
+                textArray2[i].setTextSize(16);
+                textArray2[i].setPadding(5, 20, 5, 20);
+                tr_head[i].addView(textArray[i]);
+                tr_head[i].addView(textArray2[i]);
+                tr_head[i].setBackgroundResource(R.drawable.row_border);
+                tl.addView(tr_head[i], new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT));
+
+            }*/
+
+            /*adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item);
             for (Event e: events){
                 categorySet.add(e.getCategory());
             }
@@ -128,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             // set initial selection
             boolean[] selectedItems = new boolean[adapter.getCount()];
             selectedItems[1] = true; // select second item
-            spinner.setSelected(selectedItems);
+            spinner.setSelected(selectedItems);*/
         }
         // getNode function
         private String getNode(String sTag, Element eElement) {
@@ -139,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
             return nText.getNodeValue();
         }
         public Date getdate(String sTag, Element eElement) {
-            SimpleDateFormat eDate = new SimpleDateFormat("yyyy-MM-d'T'HH:mm:ss'Z'");
+            SimpleDateFormat eDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             NodeList nlList = eElement.getElementsByTagName(sTag).item(0)
                     .getChildNodes();
             Node nValue = (Node) nlList.item(1);
@@ -151,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
-
     }
     public void setList(List<Event> events) {
         for (Event e: events){

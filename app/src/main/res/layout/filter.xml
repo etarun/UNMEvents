@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Category"
+        android:paddingBottom="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+    <com.thomashaertel.widget.MultiSpinner
+        android:id="@+id/spinnerMulti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f0e1a0"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(or)"
+        android:textStyle="italic"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"/>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search by Date"
+            android:layout_gravity="left"
+            android:paddingBottom="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:id="@+id/dateSelect"
+            android:textColor="#000"
+            android:layout_gravity="right"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+    </GridLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </GridLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show all Events"
+        android:id="@+id/searchall"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:id="@+id/search"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="right" />
+</LinearLayout>
