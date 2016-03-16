@@ -18,5 +18,5 @@
             android:layout_height="wrap_content"
             android:textColor="#000"
             android:text="TextView"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>

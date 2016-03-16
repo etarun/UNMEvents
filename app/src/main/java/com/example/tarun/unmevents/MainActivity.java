@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 events.add(event);
             }
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             String[] eventSummary = new String[events.size()];
             String[] eventDate = new String[events.size()];
             int i = 0;
@@ -210,12 +210,17 @@ public class MainActivity extends AppCompatActivity {
         }
         public Date getdate(String sTag, Element eElement) {
             SimpleDateFormat eDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat eDate1 = new SimpleDateFormat("yyyy-MM-dd");
             NodeList nlList = eElement.getElementsByTagName(sTag).item(0)
                     .getChildNodes();
             Node nValue = (Node) nlList.item(1);
             Node nText = (Node) nValue.getLastChild();
             try {
+            if(nText.getNodeName() == "date-time") {
                 return eDate.parse(nText.getNodeValue());
+            }else{
+                return eDate1.parse(nText.getNodeValue());
+            }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
