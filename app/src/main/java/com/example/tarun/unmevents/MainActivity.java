@@ -1,7 +1,9 @@
 package com.example.tarun.unmevents;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -106,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Event> result) {
 
-            //TableLayout tl = (TableLayout) findViewById(R.id.main_table);
             for (int temp = 0; temp < nodelist.getLength(); temp++) {
                 Event event = new Event();
                 Node nNode = nodelist.item(temp);
@@ -126,22 +128,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 events.add(event);
             }
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-            String[] eventSummary = new String[events.size()];
-            String[] eventDate = new String[events.size()];
-            int i = 0;
-            for(Event e:events){
-                eventSummary[i] = e.getSummary();
-                String d= "";
-                if(e.getStartTime()!=null) {
-                    d = df.format(e.getStartTime());
-                    eventDate[i] = d;
-                }
-                i++;
-            }
-            CustomListAdapter adapter=new CustomListAdapter(activity, eventSummary, eventDate);
+            CustomListAdapter adapter=new CustomListAdapter(activity, events);
             ListView list =(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent i = new Intent(MainActivity.this, EventActivity.class);
+                    i.putExtra("event", (Parcelable) parent.getItemAtPosition(position));
+                    startActivity(i);
+                }
+            });
+
            /* TextView[] textArray = new TextView[events.size()];
             TextView[] textArray2 = new TextView[events.size()];
             TableRow[] tr_head = new TableRow[events.size()];
