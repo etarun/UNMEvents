@@ -38,11 +38,14 @@ public class DateDialog extends android.support.v4.app.DialogFragment implements
 
         date=day+"-"+(month+1)+"-"+year;
 
-        String date=(month+1)+"-"+day+"-"+year;
+        String date=checkDigit(month+1)+"-"+day+"-"+year;
 
         dateSelect.setText(date);
 
     }
-
+    public String checkDigit(int number)
+    {
+        return number<=9?"0"+number:String.valueOf(number);
+    }
 
 }

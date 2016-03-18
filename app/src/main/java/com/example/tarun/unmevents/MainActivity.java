@@ -28,6 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import java.io.Serializable;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,15 +44,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 
 public class MainActivity extends AppCompatActivity {
-    private MultiSpinner spinner;
-    private ArrayAdapter<String> adapter;
-    Set<String> categorySet = new ArraySet<>();
-    String currentDate = "";
+
+
     List<Event> eventsList = new ArrayList<>();
-    Button dateSelect;
+
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String urlString = "http://datastore.unm.edu/events/events.xml";
+    Button filter;
     TableLayout t1;
 
     @Override
@@ -61,21 +62,11 @@ public class MainActivity extends AppCompatActivity {
         // create spinner list elements
         new DownloadXmlTask(this).execute(urlString);
 
-       /* dateSelect = (Button) findViewById(R.id.dateSelect);
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-        currentDate = sdf.format(new Date());
-        dateSelect.setText(currentDate);
-        dateSelect.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                DateDialog dialog = new DateDialog(v);
-                DialogFragment dialogFragment = new DateDialog(v);
-                dialogFragment.show(getSupportFragmentManager(), "start_date_picker");
-            }
-        });*/
+
     }
     class DownloadXmlTask extends AsyncTask<String, Object, List<Event>> {
         NodeList nodelist;
-        List<Event> events = new ArrayList<>();
+        ArrayList<Event> events = new ArrayList<>();
         public MainActivity activity;
         @Override
         protected void onPreExecute() {
@@ -141,63 +132,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-           /* TextView[] textArray = new TextView[events.size()];
-            TextView[] textArray2 = new TextView[events.size()];
-            TableRow[] tr_head = new TableRow[events.size()];
-
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            int i=0;
-            for(Event e:events){
-                tr_head[i] = new TableRow(getApplicationContext());
-                tr_head[i].setId(i + 1);
-                tr_head[i].setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.WRAP_CONTENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
-
-                // Here create the TextView dynamically
-
-                textArray[i] = new TextView(getApplicationContext());
-                textArray[i].setId(i + 111);
-                textArray[i].setText(e.getSummary());
-                textArray[i].setTextSize(16);
-                textArray[i].setTextColor(Color.BLACK);
-                textArray[i].setPadding(5, 20, 5, 20);
-
-                Date date = null;
-                String d = "";
-                if(e.getStartTime()!=null) {
-                    date = e.getStartTime();
-                    d = df.format(date);
+            filter = (Button) findViewById(R.id.filter);
+            filter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, FilterActivity.class);
+                    i.putExtra("events", events);
+                    startActivityForResult(i,99);
                 }
+            });
 
-                textArray2[i] = new TextView(getApplicationContext());
-                textArray2[i].setId(i + 222);
-                textArray2[i].setText(d);
-                textArray2[i].setTextColor(Color.BLACK);
-                textArray2[i].setTextSize(16);
-                textArray2[i].setPadding(5, 20, 5, 20);
-                tr_head[i].addView(textArray[i]);
-                tr_head[i].addView(textArray2[i]);
-                tr_head[i].setBackgroundResource(R.drawable.row_border);
-                tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.MATCH_PARENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
-
-            }*/
-
-            /*adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item);
-            for (Event e: events){
-                categorySet.add(e.getCategory());
-            }
-            adapter.addAll(categorySet);
-            activity.setList(events);
-            // get spinner and set adapter
-            spinner = (MultiSpinner) findViewById(R.id.spinnerMulti);
-            spinner.setAdapter(adapter, false, onSelectedListener);
-            // set initial selection
-            boolean[] selectedItems = new boolean[adapter.getCount()];
-            selectedItems[1] = true; // select second item
-            spinner.setSelected(selectedItems);*/
         }
         // getNode function
         private String getNode(String sTag, Element eElement) {
@@ -215,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             Node nValue = (Node) nlList.item(1);
             Node nText = (Node) nValue.getLastChild();
             try {
-            if(nText.getNodeName() == "date-time") {
+            if(nValue.getNodeName().matches("date-time")) {
                 return eDate.parse(nText.getNodeValue());
             }else{
                 return eDate1.parse(nText.getNodeValue());
@@ -231,11 +175,7 @@ public class MainActivity extends AppCompatActivity {
             eventsList.add(e);
         }
     }
-    private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {
-        public void onItemsSelected(boolean[] selected) {
-            // Do something here with the selected items
-        }
-    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -256,5 +196,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 99 && data != null) {
+            ArrayList<Event> filteredEvents = new ArrayList<>();
+            filteredEvents = data.getParcelableArrayListExtra("filteredEvents");
+            CustomListAdapter adapter=new CustomListAdapter(MainActivity.this, filteredEvents);
+            ListView list =(ListView)findViewById(R.id.list);
+            list.setAdapter(adapter);
+        }
     }
 }

@@ -23,8 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="Event Activity"
+            android:label="Events"
             android:name=".EventActivity" >
+        </activity>
+        <activity
+            android:label="Events"
+            android:name=".FilterActivity" >
         </activity>
     </application>
 
