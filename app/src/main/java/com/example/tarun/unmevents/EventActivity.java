@@ -1,10 +1,19 @@
 package com.example.tarun.unmevents;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,8 +27,11 @@ import java.util.Calendar;
  * Created by Tarun on 3/16/2016.
  */
 public class EventActivity extends AppCompatActivity {
+    private ShareActionProvider mShareActionProvider;
+    Intent mShareIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_activity);
         TextView eventName = (TextView) findViewById(R.id.eventName);
@@ -78,6 +90,45 @@ public class EventActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+            mShareIntent = new Intent();
+            mShareIntent.setAction(Intent.ACTION_SEND);
+            mShareIntent.setType("text/plain");
+            mShareIntent.putExtra(Intent.EXTRA_SUBJECT, event.getSummary());
+            mShareIntent.putExtra(Intent.EXTRA_TEXT,desc[1]+"\n\n"+"Start Date :"+eDate1.format(event.getStartTime()));
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate menu resource file.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        mShareActionProvider = new ShareActionProvider(this);
+        MenuItemCompat.setActionProvider(item, mShareActionProvider);
+        mShareActionProvider.setShareIntent(mShareIntent);
+        // Return true to display menu
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.menu_item_share:
+                //onShareAction();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private void onShareAction(){
+        // Create the share Intent
+        // Set the share Intent
+        if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(mShareIntent);
         }
     }
 }

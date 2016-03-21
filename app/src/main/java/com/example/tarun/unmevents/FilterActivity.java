@@ -28,6 +28,7 @@ public class FilterActivity extends AppCompatActivity {
     Set<String> categorySet = new ArraySet<>();
     ArrayList<Event> filteredEvents = new ArrayList<>();
     String currentDate = "";
+    Boolean searched = false;
     Button dateSelect;
     Button search;
     ArrayList<Event> events;
@@ -42,10 +43,13 @@ public class FilterActivity extends AppCompatActivity {
         for (Event e: events){
             categorySet.add(e.getCategory());
         }
+
         adapter.addAll(categorySet);
+
         // get spinner and set adapter
         spinner = (MultiSpinner) findViewById(R.id.spinnerMulti);
         spinner.setAdapter(adapter, false, onSelectedListener);
+
         // set initial selection
         boolean[] selectedItems = new boolean[adapter.getCount()];
         selectedItems[0] = true; // select second item
@@ -54,9 +58,10 @@ public class FilterActivity extends AppCompatActivity {
         dateSelect = (Button) findViewById(R.id.dateSelect);
 
         currentDate = sdf.format(new Date());
-        dateSelect.setText(currentDate);
+        dateSelect.setText("Select Date");
         dateSelect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                searched = true;
                 DateDialog dialog = new DateDialog(v);
                 DialogFragment dialogFragment = new DateDialog(v);
                 dialogFragment.show(getSupportFragmentManager(), "start_date_picker");
@@ -69,16 +74,21 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String selectedDate = dateSelect.getText().toString();
-                Date date = new Date();
-                try {
-                    date = sdf.parse(selectedDate);
-                    for(Event e:events){
-                        if(sdf.format(e.getStartTime()).equals(selectedDate)){
-                            filteredEvents.add(e);
+                if(!selectedDate.matches("Select Date")) {
+                    Date date = new Date();
+                    try {
+                        date = sdf.parse(selectedDate);
+                        for (Event e : events) {
+                            if (sdf.format(e.getStartTime()).equals(selectedDate)) {
+                                filteredEvents.add(e);
+                            }
                         }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                }
+                if(searched == false){
+                    filteredEvents = events;
                 }
                 Intent output = new Intent();
                 output.putExtra("filteredEvents", filteredEvents);
@@ -89,6 +99,7 @@ public class FilterActivity extends AppCompatActivity {
     }
     private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {
         public void onItemsSelected(boolean[] selected) {
+            searched = true;
             for(int i =0;i<selected.length;i++){
                 if(selected[i] == true){
                     String category = adapter.getItem(i);

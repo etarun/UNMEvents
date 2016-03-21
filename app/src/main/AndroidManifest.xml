@@ -23,11 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="Events"
+            android:label="UNMEvents"
             android:name=".EventActivity" >
         </activity>
         <activity
-            android:label="Events"
+            android:label="UNMEvents"
             android:name=".FilterActivity" >
         </activity>
     </application>

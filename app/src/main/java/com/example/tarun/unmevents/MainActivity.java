@@ -1,7 +1,10 @@
 package com.example.tarun.unmevents;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
@@ -17,10 +20,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thomashaertel.widget.MultiSpinner;
 import org.w3c.dom.Document;
@@ -35,6 +40,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -46,13 +53,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class MainActivity extends AppCompatActivity {
 
 
-    List<Event> eventsList = new ArrayList<>();
+    ArrayList<Event> eventsList = new ArrayList<>();
 
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String urlString = "http://datastore.unm.edu/events/events.xml";
     Button filter;
     TableLayout t1;
+    ImageView noConn;
+    TextView noConn1;
+    Button retry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +70,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //TableLayout tl = (TableLayout) findViewById(R.id.main_table);
         // create spinner list elements
-        new DownloadXmlTask(this).execute(urlString);
+        noConn = (ImageView)findViewById(R.id.noConn);
+        noConn1 = (TextView)findViewById(R.id.noconn1);
+        filter = (Button) findViewById(R.id.filter);
+        retry = (Button) findViewById(R.id.retry);
+        if(isNetworkStatusAvialable (getApplicationContext())) {
+            new DownloadXmlTask(this).execute(urlString);
+            noConn.setVisibility(View.GONE);
+            noConn1.setVisibility(View.GONE);
+            retry.setVisibility(View.GONE);
+        } else {
+            Toast.makeText(getApplicationContext(), "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+            noConn.setVisibility(View.VISIBLE);
+            noConn1.setVisibility(View.VISIBLE);
+            retry.setVisibility(View.VISIBLE);
+            retry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isNetworkStatusAvialable (getApplicationContext())) {
+                        new DownloadXmlTask(MainActivity.this).execute(urlString);
+                        noConn.setVisibility(View.GONE);
+                        noConn1.setVisibility(View.GONE);
+                        retry.setVisibility(View.GONE);
+                        filter.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+            filter.setVisibility(View.GONE);
+        }
+
 
 
     }
@@ -78,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected List<Event> doInBackground(String... Url) {
+        protected ArrayList<Event> doInBackground(String... Url) {
             try {
                 URL url = new URL(Url[0]);
                 DocumentBuilderFactory dbf = DocumentBuilderFactory
@@ -119,6 +157,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 events.add(event);
             }
+            Collections.sort(events, new Comparator<Event>() {
+                @Override
+                public int compare(Event o1, Event o2) {
+                    return o1.getStartTime().compareTo(o2.getStartTime());
+                }
+            });
             CustomListAdapter adapter=new CustomListAdapter(activity, events);
             ListView list =(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);
@@ -176,27 +220,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -208,5 +231,17 @@ public class MainActivity extends AppCompatActivity {
             ListView list =(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);
         }
+    }
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null)
+        {
+            NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
+            if(netInfos != null)
+            {
+                return netInfos.isConnected();
+            }
+        }
+        return false;
     }
 }

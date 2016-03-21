@@ -9,15 +9,19 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Current Events"
-           android:textColor="#B22222"
+           android:textColor="#BF0039"
            android:textAppearance="?android:attr/textAppearanceLarge"
            android:layout_gravity="left"
+           android:id="@+id/events"
            android:textStyle="bold">
        </TextView>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/filter"
+        android:textColor="#ffff"
+        android:background="@drawable/buttonshape"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Filter"
         android:layout_alignParentRight="true" />
 
@@ -27,6 +31,34 @@
         android:layout_height="wrap_content"
         android:divider="#6F4F48"
         android:dividerHeight="4px"
-        android:layout_below="@+id/filter">
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/filter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     </ListView>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wifi"
+        android:id="@+id/noConn"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Internet Connection"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="left"
+        android:id="@+id/noconn1"
+        android:layout_below="@+id/noConn"
+        android:layout_centerHorizontal="true">
+    </TextView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/retry"
+        android:text="Retry"
+        android:layout_below="@+id/noconn1"
+        android:layout_alignRight="@+id/noConn"
+        android:layout_alignEnd="@+id/noConn" />
 </RelativeLayout>

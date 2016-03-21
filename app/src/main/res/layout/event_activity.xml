@@ -4,7 +4,8 @@
     android:layout_height="match_parent">
 <LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp">
 
     <TextView
         android:layout_alignParentLeft="true"
@@ -148,7 +149,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/filter"
         android:text="Add to Calender"
-        android:textColor="#000000"
+        android:textColor="#ffff"
+        android:padding="5dp"
+        android:background="@drawable/buttonshape"
         android:layout_gravity="center"/>
 </LinearLayout>
 </ScrollView>
