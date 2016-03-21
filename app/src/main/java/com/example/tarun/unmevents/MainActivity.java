@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        android.support.v7.app.ActionBar menu = getSupportActionBar();
+        menu.setDisplayShowHomeEnabled(true);
+        menu.setLogo(R.drawable.logoicon1);
+        menu.setDisplayUseLogoEnabled(true);
         //TableLayout tl = (TableLayout) findViewById(R.id.main_table);
         // create spinner list elements
         noConn = (ImageView)findViewById(R.id.noConn);

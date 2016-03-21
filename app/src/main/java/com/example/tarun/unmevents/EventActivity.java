@@ -34,6 +34,10 @@ public class EventActivity extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_activity);
+        android.support.v7.app.ActionBar menu = getSupportActionBar();
+        menu.setDisplayShowHomeEnabled(true);
+        menu.setLogo(R.drawable.logoicon1);
+        menu.setDisplayUseLogoEnabled(true);
         TextView eventName = (TextView) findViewById(R.id.eventName);
         TextView eventdate = (TextView) findViewById(R.id.eventDate1);
         TextView eventtime = (TextView) findViewById(R.id.eventDate2);

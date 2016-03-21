@@ -37,6 +37,10 @@ public class FilterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filter);
+        android.support.v7.app.ActionBar menu = getSupportActionBar();
+        menu.setDisplayShowHomeEnabled(true);
+        menu.setLogo(R.drawable.logoicon1);
+        menu.setDisplayUseLogoEnabled(true);
         Bundle data = getIntent().getExtras();
          events = data.getParcelableArrayList("events");
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
