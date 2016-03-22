@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="100dp" />
+<GridLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <android.widget.Space
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/unmevents"
+        android:padding="5dp"
+        android:textColor="#ffff"
+        android:background="@drawable/round_button"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="UNM Events"
+        android:layout_alignParentLeft="true" />
+    <android.widget.Space
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="All UNM Events"
+        android:textColor="#BF0039"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="right"
+        android:textStyle="italic"
+        android:id="@+id/unmevents1">
+    </TextView>
+</GridLayout>
+    <android.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" />
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.widget.Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/atheltics"
+            android:textColor="#ffff"
+            android:padding="5dp"
+            android:background="@drawable/round_button"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Athletics"
+            android:layout_alignParentLeft="true" />
+        <android.widget.Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Athletic Events"
+            android:textStyle="italic"
+            android:textColor="#BF0039"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="right"
+            android:id="@+id/atheltics1">
+        </TextView>
+    </GridLayout>
+    <android.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" />
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.widget.Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/abqevents"
+            android:padding="5dp"
+            android:textColor="#ffff"
+            android:background="@drawable/round_button"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Abq Events"
+            android:layout_alignParentLeft="true" />
+        <android.widget.Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Albuqerque Events"
+            android:textStyle="italic"
+            android:textColor="#BF0039"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="right"
+            android:id="@+id/abqevents1">
+        </TextView>
+    </GridLayout>
+    </LinearLayout>
+</ScrollView>

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -31,6 +33,7 @@ public class EventActivity extends AppCompatActivity {
     Intent mShareIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_activity);
@@ -44,42 +47,82 @@ public class EventActivity extends AppCompatActivity {
         TextView eventDescription = (TextView) findViewById(R.id.eventDesc);
         TextView eventDesc = (TextView) findViewById(R.id.eventDesc1);
         TextView eventCategory = (TextView) findViewById(R.id.eventCategory1);
+        TextView location = (TextView) findViewById(R.id.eventLoc);
         TextView eventLoc = (TextView) findViewById(R.id.eventLoc1);
         TextView eventClass = (TextView) findViewById(R.id.eventClass1);
+        TextView eClass = (TextView) findViewById(R.id.eventClass);
         TextView eventenddate = (TextView) findViewById(R.id.eventEndDate1);
         TextView eventEndtime = (TextView) findViewById(R.id.eventEndDate2);
+        TextView org = (TextView) findViewById(R.id.org);
         Button cal = (Button) findViewById(R.id.filter);
+        ImageButton mail = (ImageButton) findViewById(R.id.mail);
 
         Bundle data = getIntent().getExtras();
         final Event event = (Event) data.getParcelable("event");
+        final String atletic = data.getString("athletic");
         if(event!=null) {
+            String time = "All Day";
             SimpleDateFormat eDate = new SimpleDateFormat("HH:mm:ss");
             SimpleDateFormat eDate1 = new SimpleDateFormat("MM-dd-yyyy");
-            eventName.setText(event.getSummary());
-            eventdate.setText(eDate1.format(event.getStartTime()));
-            String time = "All Day";
-            if(eDate.format(event.getStartTime()).matches("00:00:00")){
-                eventtime.setText(time);
-            }else {
-                eventtime.setText(eDate.format(event.getStartTime()));
+            if(event.getSummary()!= null) {
+                eventName.setText(event.getSummary());
             }
-            eventenddate.setText(eDate1.format(event.getEndTime()));
-            if(eDate.format(event.getEndTime()).matches("00:00:00")){
-                eventEndtime.setText(time);
-            }else {
-                eventEndtime.setText(eDate.format(event.getEndTime()));
+            if(event.getStartTime() != null) {
+                eventdate.setText(eDate1.format(event.getStartTime()));
+                if(atletic != null && atletic.matches("no")) {
+                    if (eDate.format(event.getStartTime()).matches("00:00:00")) {
+                        eventtime.setText(time);
+                    } else {
+                        eventtime.setText(eDate.format(event.getStartTime()));
+                    }
+                }else{
+                    eventtime.setText(event.getDescription().split("-")[1]);
+                }
+            }
+            if(event.getEndTime() != null) {
+                eventenddate.setText(eDate1.format(event.getEndTime()));
+                if(atletic != null && atletic.matches("no")) {
+                    if (eDate.format(event.getEndTime()).matches("00:00:00")) {
+                        eventEndtime.setText(time);
+                    } else {
+                        eventEndtime.setText(eDate.format(event.getEndTime()));
+                    }
+                }
             }
             String delimiter = "\\\\n";
-            String[] desc = event.getDescription().split(delimiter);
-            if(desc[1].matches("")){
-                eventDescription.setVisibility(View.GONE);
-                eventDesc.setVisibility(View.GONE);
-            }else{
-                eventDesc.setText(desc[1]);
+            String [] desc = event.getDescription().split(delimiter);
+            if(atletic != null && atletic.matches("yes")){
+                eventDesc.setText(event.getDescription().split("-")[0]);
+            }else {
+                if (desc[1].matches("")) {
+                    eventDescription.setVisibility(View.GONE);
+                    eventDesc.setVisibility(View.GONE);
+                } else {
+                    eventDesc.setText(desc[1]);
+                }
             }
             eventCategory.setText(event.getCategory());
-            eventLoc.setText(event.getLocation());
-            eventClass.setText(event.getEventClass());
+            if(atletic != null && atletic.matches("no")) {
+                eventLoc.setText(event.getLocation());
+                eventClass.setText(event.getEventClass());
+                mail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:"));
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {event.getOrganizer().split(":")[1]});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, event.getSummary());
+                        startActivity(Intent.createChooser(intent, "Send Email"));
+                    }
+                });
+            }else{
+                mail.setVisibility(View.GONE);
+                org.setVisibility(View.GONE);
+                location.setVisibility(View.GONE);
+                eClass.setVisibility(View.GONE);
+                eventLoc.setVisibility(View.GONE);
+                eventClass.setVisibility(View.GONE);
+            }
             cal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +141,14 @@ public class EventActivity extends AppCompatActivity {
             mShareIntent.setAction(Intent.ACTION_SEND);
             mShareIntent.setType("text/plain");
             mShareIntent.putExtra(Intent.EXTRA_SUBJECT, event.getSummary());
-            mShareIntent.putExtra(Intent.EXTRA_TEXT,desc[1]+"\n\n"+"Start Date :"+eDate1.format(event.getStartTime()));
+            if(atletic != null && atletic.matches("yes")){
+                mShareIntent.putExtra(Intent.EXTRA_TEXT, event.getDescription().split("-")[0] + "\n\n"+
+                          "Start Date :" + eDate1.format(event.getStartTime())
+                        + "\n" + "Start Time :" + event.getDescription().split("-")[1]);
+            }else {
+                mShareIntent.putExtra(Intent.EXTRA_TEXT, desc[1] + "\n\n" + "Start Date :" + eDate1.format(event.getStartTime())
+                        + "\n" + "Start Time :" + eDate.format(event.getStartTime()));
+            }
         }
     }
     @Override

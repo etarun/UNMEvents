@@ -144,6 +144,34 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/eventClass1"
         android:paddingLeft="20dp"/>
+<GridLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/org"
+        android:textStyle="bold"
+        android:text = "Contact Organizer"
+        android:paddingLeft="20dp"/>
+    <android.widget.Space
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"/>
+    <ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/mail"
+    android:text="Add to Calender"
+    android:textColor="#ffff"
+    android:padding="5dp"
+    android:background="@drawable/mail"
+    android:layout_gravity="right"/>
+</GridLayout>
+    <android.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -153,5 +181,7 @@
         android:padding="5dp"
         android:background="@drawable/buttonshape"
         android:layout_gravity="center"/>
+
+
 </LinearLayout>
 </ScrollView>
