@@ -174,6 +174,7 @@ public class AthleticActivity extends AppCompatActivity {
                     aEvent.setCategory(catnameEle.getFirstChild().getNodeValue());
                 events.add(aEvent);
             }
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             CustomListAdapter adapter=new CustomListAdapter(activity, events);
             ListView list =(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);

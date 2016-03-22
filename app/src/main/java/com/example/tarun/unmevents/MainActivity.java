@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     return o1.getStartTime().compareTo(o2.getStartTime());
                 }
             });
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             CustomListAdapter adapter=new CustomListAdapter(activity, events);
             ListView list =(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);
