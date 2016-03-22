@@ -6,9 +6,13 @@ Application Name: UNMEvents
 Description:
 
 	UNMEvents android application developed with using Material Design to enhance the user experience with Material themes and better animations.  This application provides a list of all ongoing events in and around Albuquerque. 
+	<br>
 This app displays events from:
+<br>
 1.	UNM – General Events
+<br>
 2.	UNM – Athletic Events
+<br>
 3.	Albuquerque To Do Events
 
 This application lets user to:
