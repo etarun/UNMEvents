@@ -37,9 +37,9 @@ Application Requirements:
 	Internet access (Wi-Fi/Mobile Data)
 
 
-![alt tag]( "First") &nbsp;
+![alt tag](https://github.com/etarun/UNMEvents/blob/master/ScreenShots/1_Home.png "First") &nbsp;
 <br>
-![alt tag]( "Optional title") &nbsp;
+![alt tag](https://github.com/etarun/UNMEvents/blob/master/ScreenShots/2_EventsList.png "Optional title") &nbsp;
 <br>
-![alt tag]( "Optional title") &nbsp;
+![alt tag](https://github.com/etarun/UNMEvents/blob/master/ScreenShots/6_Share.png "Optional title") &nbsp;
  
