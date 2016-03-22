@@ -14,6 +14,7 @@ This app displays events from:
 <br>
 3.	Albuquerque To Do Events
 <br>
+<br>
 This application lets user to:
 <br>
 i.	Share among friends using Social Media, Email etc.,
@@ -21,6 +22,7 @@ i.	Share among friends using Social Media, Email etc.,
 ii.	Add events to calendar
 <br>
 iii.	Communicate with the Event organizer over Email.
+<br>
 <br>
  Tools used for developing UNMEvents:
 <br>
@@ -34,4 +36,10 @@ Application Requirements:
 <br>
 	Internet access (Wi-Fi/Mobile Data)
 
+
+![alt tag]( "First") &nbsp;
+<br>
+![alt tag]( "Optional title") &nbsp;
+<br>
+![alt tag]( "Optional title") &nbsp;
  
